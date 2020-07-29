@@ -14,13 +14,13 @@ spec:
       type: image
     - name: git-source
       type: git
-#  params:
-#  - name: docker-imagename
-#    type: string
-#    default: "null"
-#  - name: docker-imagetag
-#    type: string
-#    default: "null"
+  params:
+  - name: docker-imagename
+    type: string
+    default: "null"
+  - name: docker-imagetag
+    type: string
+    default: "null"
   steps:
   - name: build
     # This steps builds the source project using appsody build.
@@ -44,8 +44,7 @@ spec:
  
         # Docker does not support upper case characters in the image name.  Github does not have this restriction.
         # So lowercase the image name if it has any upper case characters.
-        # OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( /scripts/imageurl_imagename_lowercase.sh -u "$(inputs.resources.docker-image.url)" -n "$(inputs.params.docker-imagename)" -t "$(inputs.params.docker-imagetag)" )
-        OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( /scripts/imageurl_imagename_lowercase.sh -u "$(inputs.resources.docker-image.url)" )
+        OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( /scripts/imageurl_imagename_lowercase.sh -u "$(inputs.resources.docker-image.url)" -n "$(inputs.params.docker-imagename)" -t "$(inputs.params.docker-imagetag)" )
         retVal=$?
         if [ $retVal -ne 0 ]
         then
@@ -93,8 +92,7 @@ spec:
       - |
         # Docker does not support upper case characters in the image name.  Github does not have this restriction.
         # So lowercase the image name if it has any upper case characters.
-        # OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( /scripts/imageurl_imagename_lowercase.sh -u "$(inputs.resources.docker-image.url)" -n "$(inputs.params.docker-imagename)" -t "$(inputs.params.docker-imagetag)" )
-        OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( /scripts/imageurl_imagename_lowercase.sh -u "$(inputs.resources.docker-image.url)" )
+        OUTPUTS_RESOURCE_DOCKER_IMAGE_URL_LOWERCASE=$( /scripts/imageurl_imagename_lowercase.sh -u "$(inputs.resources.docker-image.url)" -n "$(inputs.params.docker-imagename)" -t "$(inputs.params.docker-imagetag)" )
         retVal=$?
         if [ $retVal -ne 0 ]
         then

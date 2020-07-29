@@ -9,7 +9,7 @@ spec:
   - name: event-ref
     value: refs/heads/master
   - name: docker-imagename
-    value: index.docker.io/dewandemo/kabanero
+    value: kabanero
   - name: docker-imagetag
     value: latest
   serviceAccountName: dewan-sa
