@@ -8,10 +8,10 @@ spec:
     value: push
   - name: event-ref
     value: refs/heads/master
-  - name: docker-imagename
-    value: kabanero
-  - name: docker-imagetag
-    value: latest
+#  - name: docker-imagename
+#    value: kabanero
+#  - name: docker-imagetag
+#    value: latest
   serviceAccountName: dewan-sa
   timeout: "1h0m0s"
   pipelineRef:

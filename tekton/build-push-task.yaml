@@ -17,10 +17,10 @@ spec:
   params:
   - name: docker-imagename
     type: string
-    default: "null"
+    default: "kabanero"
   - name: docker-imagetag
     type: string
-    default: "null"
+    default: "latest"
   steps:
   - name: build
     # This steps builds the source project using appsody build.

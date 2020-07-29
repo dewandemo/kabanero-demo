@@ -3,11 +3,11 @@ kind: Pipeline
 metadata:
   name: build-push-pl
 spec:
-  params:
-   - name: docker-imagename
-     type: string
-   - name: docker-imagetag
-     type: string
+#  params:
+#   - name: docker-imagename
+#     type: string
+#   - name: docker-imagetag
+#     type: string
   resources:
     - name: git-source
       type: git
@@ -18,10 +18,10 @@ spec:
       taskRef:
         name: build-push-task
       params:
-        - name: docker-imagename
-          value: "$(params.docker-imagename)"
-        - name: docker-imagetag
-          value: "$(params.docker-imagetag)"
+#        - name: docker-imagename
+#          value: "$(params.docker-imagename)"
+#        - name: docker-imagetag
+#          value: "$(params.docker-imagetag)"
       resources:
         inputs:
         - name: git-source
