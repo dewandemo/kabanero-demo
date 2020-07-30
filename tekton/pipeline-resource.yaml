@@ -3,15 +3,6 @@ items:
 - apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: docker-image
-  spec:
-    params:
-    - name: url
-      value: index.docker.io/dewandemo
-    type: image
-- apiVersion: tekton.dev/v1alpha1
-  kind: PipelineResource
-  metadata:
     name: git-source
   spec:
     params:
@@ -20,4 +11,13 @@ items:
     - name: url
       value: https://github.com/dewandemo/kabanero-nodejs-sample
     type: git
+- apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: docker-image
+  spec:
+    params:
+    - name: url
+      value: index.docker.io/dewandemo
+    type: image
 kind: List
