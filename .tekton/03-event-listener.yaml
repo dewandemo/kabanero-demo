@@ -1,0 +1,11 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: kabanero-build-listener
+spec:
+  serviceAccountName: pipeline-account
+  triggers:
+  - bindings:
+    - name: kabanero-trigger-binding
+    template:
+      name: kabanero-trigger-template
