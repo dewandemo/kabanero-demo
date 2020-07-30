@@ -76,10 +76,10 @@ spec:
       pipelineRef:
         name: build-push-pl
       resources:
-      - name: git-repo
+      - name: git-source
         resourceRef:
           name: repo-$(uid)
-      - name: target-image
+      - name: docker-image
         resourceRef:
           name: image-$(uid)
       params:
