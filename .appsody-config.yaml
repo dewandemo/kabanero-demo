@@ -1,2 +1,5 @@
 project-name: kabanero-demo
 stack: docker.io/kabanero/nodejs:0.3
+DEFAULT_STACK_IMAGE_REGISTRY_URL: index.docker.io/dewandemo/kabanero
+DEFAULT_STACK_IMAGE_REGISTRY_SECRET_USERNAME=${DOCKER_USERNAME}
+DEFAULT_STACK_IMAGE_REGISTRY_SECRET_PASSWORD=${DOCKER_PASSWORD}
