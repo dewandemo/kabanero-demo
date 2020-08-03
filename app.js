@@ -1,1 +1,1 @@
-console.log("Hello from Node.js 12 on ICPA-Kabanero!")
+console.log("Hello from Node.js 12 on Kabanero!")
