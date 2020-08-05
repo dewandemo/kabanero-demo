@@ -3,7 +3,8 @@ kind: Pipeline
 metadata:
   name: kabanero-pipelines-build-push-pipeline
 spec:
- params:
+ 
+  params:
     - name: ibmcloud-api
       type: string
     - name: ibmcloud-api-key
@@ -20,6 +21,7 @@ spec:
       type: string 
     - name: docker-imagetag
       type: string     
+  
   tasks:
     - name: kabanero-pipelines-build-push-task
       taskRef:
