@@ -1,35 +1,43 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: build-push-pl
+  name: kabanero-pipelines-build-push-pipeline
 spec:
-#  params:
-#   - name: docker-imagename
-#     type: string
-#   - name: docker-imagetag
-#     type: string
-  resources:
-    - name: git-source
-      type: git
-    - name: docker-image
-      type: image
+ params:
+    - name: ibmcloud-api
+      type: string
+    - name: ibmcloud-api-key
+      type: string
+    - name: cluster-name
+      type: string
+    - name: openshift-project-name
+      type: string
+    - name: icr-url
+      type: string
+    - name: icr-namespace
+      type: string 
+    - name: icr-repository
+      type: string 
+    - name: docker-imagetag
+      type: string     
   tasks:
-    - name: build-push-task
+    - name: kabanero-pipelines-build-push-task
       taskRef:
-        name: build-push-task
+        name: kabanero-pipelines-build-push-task
       params:
-#        - name: docker-imagename
-#          value: "$(params.docker-imagename)"
-#        - name: docker-imagetag
-#          value: "$(params.docker-imagetag)"
-      resources:
-        inputs:
-        - name: git-source
-          resource: git-source
-        - name: docker-image
-          resource: docker-image
-        outputs:
-        - name: docker-image
-          resource: docker-image
-        - name: git-source
-          resource: git-source
+        - name: ibmcloud-api
+          value: "$(params.ibmcloud-api)"
+        - name: ibmcloud-api-key
+          value: "$(params.ibmcloud-api-key)"
+        - name: cluster-name
+          value: "$(params.cluster-name)"
+        - name: openshift-project-name
+          value: "$(params.openshift-project-name)"
+        - name: icr-url
+          value: "$(params.icr-url)"
+        - name: icr-namespace
+          value: "$(params.icr-namespace)" 
+        - name: icr-repository
+          value: "$(params.icr-repository)"
+        - name: docker-imagetag
+          value: "$(params.docker-imagetag)"

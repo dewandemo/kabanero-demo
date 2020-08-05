@@ -6,82 +6,43 @@ spec:
   params:
   - name: git-repo-url
     description: URL for the git repository
-    default: "https://github.com/dewandemo/kabanero-nodejs-sample"
   - name: git-revision
     description: Git commit identifier for the trigger
-    default: "master"
   - name: git-branch
     description: Git branch
-    default: "master"
-  - name: registry-url
-    description: URL of the container registry, such as docker.io or us.icr.io
-    default: "index.docker.io"
-  - name: docker-repo-name
-    description: Name of the docker repo
-    default: "kabanero"
-  - name: docker-username
-    description: User pushing an image to the registry
-    default: "dewandemo"
-  - name: docker-password
-    description: Password for the user pushing an image to the registry
+  - name: ibmcloud-api
+    description: the ibmcloud api URL
+  - name: ibmcloud-api-key
+    description: API key for the account
+  - name: cluster-name
+    description: Name of the ROKS cluster to connect
+  - name: openshift-project-name
+    description: OpenShift project name
+  - name: icr-url
+    description: URL for IBM Container Registry
+  - name: icr-namespace
+    description: Namespace on IBM Container Registry
+  - name: icr-repository
+    description: Repository name on IBM Container Registry  
+  - name: docker-imagetag
+    description: Image tag for the image
 
   resourcetemplates:
-
-  - apiVersion: v1
-    kind: Secret
-    metadata:
-      annotations:
-        tekton.dev/docker-0: $(params.registry-url)
-      name: docker-secret
-    type: kubernetes.io/basic-auth
-    stringData:
-      username: $(params.docker-username)
-      password: $(params.docker-password)
 
   - apiVersion: v1
     kind: ServiceAccount
     metadata:
       name: pipeline-account
     secrets:
-    - name: docker-secret
-
-  - apiVersion: tekton.dev/v1alpha1
-    kind: PipelineResource
-    metadata:
-      name: repo-$(uid)
-    spec:
-      type: git
-      params:
-      - name: revision
-        value: $(params.git-revision)
-      - name: url
-        value: $(params.git-repo-url)
-
-  - apiVersion: tekton.dev/v1alpha1
-    kind: PipelineResource
-    metadata:
-      name: image-$(uid)
-    spec:
-      type: image
-      params:
-      - name: url
-        value: $(params.registry-url)/$(params.docker-repo-name):$(uid)
 
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
-      name: build-$(params.docker-repo-name)-$(uid)
+      name: kabanero-pipelines-build-push-pipelinerun
     spec:
       serviceAccountName: pipeline-account
       pipelineRef:
-        name: build-push-pl
-      resources:
-      - name: git-source
-        resourceRef:
-          name: repo-$(uid)
-      - name: docker-image
-        resourceRef:
-          name: image-$(uid)
+        name: kabanero-pipelines-build-push-pipeline
       params:
       - name: git-repo-url
         value: $(params.git-repo-url)
@@ -89,15 +50,19 @@ spec:
         value: $(params.git-branch)
       - name: git-revision
         value: $(params.git-revision)
-      - name: registry-url
-        value: $(params.registry-url)
-      - name: docker-repo-name
-        value: $(params.docker-repo-name)
-      - name: docker-username
-        value: $(params.docker-username)
-      - name: docker-password
-        value: $(params.docker-password)
-      workspaces:
-        - name: pipeline-ws
-          persistentVolumeClaim:
-            claimName: build-template-slack-$(uid)-pvc
+      - name: ibmcloud-api
+        value: $(params.ibmcloud-api)
+      - name: ibmcloud-api-key
+        value: $(params.ibmcloud-api-key)
+      - name: cluster-name
+        value: $(params.cluster-name)
+      - name: openshift-project-name
+        value: $(params.openshift-project-name)
+      - name: icr-url
+        value: $(params.icr-url)
+      - name: icr-namespace
+        value: $(params.icr-namespace)
+      - name: icr-repository
+        value: $(params.icr-repository)
+      - name: docker-imagetag
+        value: $(params.docker-imagetag)  

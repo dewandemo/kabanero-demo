@@ -1,0 +1,72 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: kabanero-pipelines-build-push-task
+spec:
+  params:
+  - name: ibmcloud-api
+    description: the ibmcloud api
+    default: https://cloud.ibm.com
+  - name: ibmcloud-api-key
+    type: string
+  - name: cluster-name
+    type: string
+    default: "app-platform"
+  - name: openshift-project-name
+    type: string
+    default: "kabanero"
+  - name: icr-url
+    type: string
+    default: "us.icr.io"
+  - name: icr-namespace
+    type: string
+    default: "build-template"
+  - name: icr-repository
+    type: string
+    default: "build-template"  
+  - name: docker-imagetag
+    type: string
+    default: "latest"
+  steps:
+  - name: orchestrate-roks-kabanero-pipeline
+    # This step connects to the desired ROKS cluster and let the kabanero pipeline do the build and push.
+    securityContext:
+      privileged: true
+    image: ibmgaragecloud/cli-tools@sha256:ca47bfe72e7ca6625174938cbac08831e8b973aece587b6fbd24d5f75fccc93e
+    command: ["/bin/bash"]
+    args:
+      - -c
+      - |
+        # Install tekton CLI to be able to run tkn commands
+        # Get the tar.xz
+        curl -LO https://github.com/tektoncd/cli/releases/download/v0.11.0/tkn_0.11.0_Linux_x86_64.tar.gz
+        # Extract tkn to your PATH (e.g. /usr/local/bin)
+        sudo tar xvzf tkn_0.11.0_Linux_x86_64.tar.gz -C /usr/local/bin/ tkn
+        if [ $? != 0 ]; then
+            echo "[ERROR] Could not install Tekton CLI. Please check required access to run sudo command. Pipeline run aborted."
+            exit 1
+        fi
+
+        # Connect and login to IBM Cloud ROKS cluster 
+        ibmcloud login --apikey ${ibmcloud-api-key} -a {ibmcloud-api} --no-region
+        ibmcloud oc cluster config -c ${cluster-name}
+        oc login -u apikey -p ${ibmcloud-api-key}
+        oc project ${openshift-project-name}
+        if [ $? != 0 ]; then
+            echo "[ERROR] Connection to the ROKS cluster failed. Please check your credentials. Pipeline run aborted."
+            exit 1
+        fi        
+
+        echo "Running your pipeline"
+
+        echo "Pushing the image to ${icr-url}/${icr-namespace}/${icr-repository}" 
+
+        echo "Done!"
+        
+    volumeMounts:
+    - mountPath: /var/lib/containers
+      name: varlibcontainers
+
+  volumes:
+  - name: varlibcontainers
+    emptyDir: {}
