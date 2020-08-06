@@ -59,7 +59,7 @@ spec:
 
         echo "Running your pipeline"
 
-        echo "Pushing the image to $(params.icr-url)/$(params.icr-namespace)/$(parmas.icr-repository)" 
+        echo "Pushing the image to $(params.icr-url)/$(params.icr-namespace)/$(params.icr-repository)" 
 
         echo "Done!"
         
