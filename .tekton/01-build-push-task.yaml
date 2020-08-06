@@ -46,12 +46,12 @@ spec:
             echo "[ERROR] Could not install Tekton CLI. Please check required access to run sudo command. Pipeline run aborted."
             exit 1
         fi
-        echo "Now connecting to IBM Cloud URL {ibmcloud-api} ..."
+        echo "Now connecting to IBM Cloud URL $(params.ibmcloud-api) ..."
         # Connect and login to IBM Cloud ROKS cluster 
-        ibmcloud login --apikey ${ibmcloud-api-key} -a {ibmcloud-api} --no-region
-        ibmcloud oc cluster config -c ${cluster-name}
-        oc login -u apikey -p ${ibmcloud-api-key}
-        oc project ${openshift-project-name}
+        ibmcloud login --apikey $(params.ibmcloud-api-key) -a $(params.ibmcloud-api) --no-region
+        ibmcloud oc cluster config -c $(params.cluster-name)
+        oc login -u apikey -p $(params.ibmcloud-api-key)
+        oc project $(params.openshift-project-name)
         if [ $? != 0 ]; then
             echo "[ERROR] Connection to the ROKS cluster failed. Please check your credentials. Pipeline run aborted."
             exit 1
@@ -59,7 +59,7 @@ spec:
 
         echo "Running your pipeline"
 
-        echo "Pushing the image to ${icr-url}/${icr-namespace}/${icr-repository}" 
+        echo "Pushing the image to $(params.icr-url)/$(params.icr-namespace)/$(parmas.icr-repository)" 
 
         echo "Done!"
         
