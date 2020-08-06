@@ -46,7 +46,7 @@ spec:
             echo "[ERROR] Could not install Tekton CLI. Please check required access to run sudo command. Pipeline run aborted."
             exit 1
         fi
-
+        echo "Now connecting to IBM Cloud..."
         # Connect and login to IBM Cloud ROKS cluster 
         ibmcloud login --apikey ${ibmcloud-api-key} -a {ibmcloud-api} --no-region
         ibmcloud oc cluster config -c ${cluster-name}
