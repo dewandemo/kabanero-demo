@@ -57,11 +57,31 @@ spec:
             exit 1
         fi        
 
-        echo "Running your pipeline"
+echo "Creating docker secret..."
 
-        echo "Pushing the image to $(params.icr-url)/$(params.icr-namespace)/$(params.icr-repository)" 
+oc create secret docker-registry dewans-icr-secret \
+            --docker-server=us.icr.io \
+            --docker-username=iamapikey \
+            --docker-password=$(params.ibmcloud-api-key) \
+            --docker-email=cicd@nonexistent.email.ibm.com && \
 
-        echo "Done!"
+echo "linking docker secret..."
+
+oc secrets link kabanero-pipeline dewans-icr-secret
+
+echo "Starting pipeline..."
+
+tkn pipeline start nodejs-build-push-pl -r git-source=git-source-tmsp7 -r docker-image=docker-icr-image -s kabanero-pipeline
+
+sleep 30
+
+echo "PipelineRun in progress..."
+
+oc secrets unlink kabanero-pipeline dewans-icr-secret
+
+oc delete secret dewans-icr-secret --ignore-not-found=true
+  
+echo "Done!"
         
     volumeMounts:
     - mountPath: /var/lib/containers
