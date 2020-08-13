@@ -32,6 +32,7 @@ spec:
     # This step connects to the desired ROKS cluster and let the kabanero pipeline do the build and push.
     securityContext:
       privileged: true
+    # https://cloudnativetoolkit.dev/guides/tools-image/ using this image which has both ibmcloud and oc installed 
     image: ibmgaragecloud/cli-tools@sha256:ca47bfe72e7ca6625174938cbac08831e8b973aece587b6fbd24d5f75fccc93e
     command: ["/bin/bash"]
     args:
@@ -59,7 +60,7 @@ spec:
 
 echo "Creating docker secret..."
 
-oc create secret docker-registry dewans-icr-secret \
+oc create secret docker-registry docker-icr-secret \
             --docker-server=us.icr.io \
             --docker-username=iamapikey \
             --docker-password=$(params.ibmcloud-api-key) \
@@ -67,19 +68,20 @@ oc create secret docker-registry dewans-icr-secret \
 
 echo "linking docker secret..."
 
-oc secrets link kabanero-pipeline dewans-icr-secret
+oc secrets link kabanero-pipeline docker-icr-secret
 
 echo "Starting pipeline..."
 
 tkn pipeline start nodejs-build-push-pl -r git-source=git-source-tmsp7 -r docker-image=docker-icr-image -s kabanero-pipeline
 
-sleep 30
+# For this sample, a wait time is used to delete/unlink secrets but you can use more appropriate methods with checks on the piepelinerun finishes.
+sleep 400
 
 echo "PipelineRun in progress..."
 
-oc secrets unlink kabanero-pipeline dewans-icr-secret
+oc secrets unlink kabanero-pipeline docker-icr-secret
 
-oc delete secret dewans-icr-secret --ignore-not-found=true
+oc delete secret docker-icr-secret --ignore-not-found=true
   
 echo "Done!"
         
