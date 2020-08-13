@@ -74,7 +74,8 @@ echo "Starting pipeline..."
 
 tkn pipeline start nodejs-build-push-pl -r git-source=git-source-tmsp7 -r docker-image=docker-icr-image -s kabanero-pipeline
 
-# For this sample, a wait time is used to delete/unlink secrets but you can use more appropriate methods with checks on the piepelinerun finishes.
+# For this sample, a wait time is used to delete and unlink secrets but you can use more appropriate methods with checks on the piepelinerun finishes
+
 sleep 400
 
 echo "PipelineRun in progress..."
